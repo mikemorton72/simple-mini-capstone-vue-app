@@ -1,14 +1,16 @@
 <template>
   <div class="home">
     <h1>Simple Products App</h1>
+    <h2>Create a new Product</h2>
     <p>Name: <input type="text" v-model="newProduct.name" /></p>
     <p>Description: <input type="text" v-model="newProduct.description" /></p>
     <p>Price: <input type="text" v-model="newProduct.price" /></p>
     <p>image_url: <input type="text" v-model="newProduct.image_url" /></p>
     <button v-on:click="productsCreate">Add Product</button>
     <hr />
-    <div v-for="product in products" :key="product.id">
-      <p>Product: {{ product.name }}</p>
+    <div v-for="product in sortedProducts" v-bind:key="product.id">
+      <p>Product: {{ product.id }}</p>
+      <p>{{ product.name }}</p>
       <img v-bind:src="product.image_url" />
       <p>Description: {{ product.description }}</p>
       <p>Price: {{ product.price }}</p>
@@ -46,6 +48,12 @@ export default {
           this.products.push(response.data);
           this.newProduct = {};
         });
+    },
+  },
+  computed: {
+    sortedProducts: function () {
+      var sortProducts = this.products;
+      return sortProducts.sort((a, b) => a.id - b.id);
     },
   },
 };
