@@ -6,7 +6,7 @@
     <p>Description: <input type="text" v-model="newProduct.description" /></p>
     <p>Price: <input type="text" v-model="newProduct.price" /></p>
     <p>image_url: <input type="text" v-model="newProduct.image_url" /></p>
-    <button v-on:click="productsCreate">Add Product</button>
+    <button v-on:click="createProduct">Add Product</button>
     <hr />
     <div v-for="product in sortedProducts" v-bind:key="product.id">
       <p>Product: {{ product.id }}</p>
@@ -14,8 +14,8 @@
       <img v-bind:src="product.image_url" />
       <p>Description: {{ product.description }}</p>
       <p>Price: {{ product.price }}</p>
-      <button v-on:click="productsShow(product)">Show Info</button>
-      <button v-on:click="productsUpdateForm(product)">Update Info</button>
+      <button v-on:click="showProduct(product)">Show Info</button>
+      <button v-on:click="updateFormProduct(product)">Update Info</button>
       <hr />
     </div>
     <dialog id="product-details">
@@ -39,7 +39,7 @@
         <p>
           Image URL: <input type="text" v-model="currentProduct.image_url" />
         </p>
-        <button v-on:click="productsUpdate()">Update</button>
+        <button v-on:click="updateProduct()">Update</button>
       </form>
     </dialog>
   </div>
@@ -61,15 +61,15 @@ export default {
     };
   },
   created: function () {
-    this.productsIndex();
+    this.indexProducts();
   },
   methods: {
-    productsIndex: function () {
+    indexProducts: function () {
       axios.get("http://localhost:3000/products").then((response) => {
         this.products = response.data;
       });
     },
-    productsCreate: function () {
+    createProduct: function () {
       axios
         .post("http://localhost:3000/products", this.newProduct)
         .then((response) => {
@@ -81,16 +81,16 @@ export default {
           this.errors = error.response.data.errors;
         });
     },
-    productsShow: function (product) {
+    showProduct: function (product) {
       this.currentProduct = product;
       console.log(this.currentProduct);
       document.querySelector("#product-details").showModal();
     },
-    productsUpdateForm: function (product) {
+    updateFormProduct: function (product) {
       this.currentProduct = product;
       document.querySelector("#product-update").showModal();
     },
-    productsUpdate: function () {
+    updateProduct: function () {
       axios
         .patch(
           `http://localhost:3000/products/${this.currentProduct.id}`,
