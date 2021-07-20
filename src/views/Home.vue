@@ -14,8 +14,8 @@
       <img v-bind:src="product.image_url" />
       <p>Description: {{ product.description }}</p>
       <p>Price: {{ product.price }}</p>
-      <button v-on:click="showProduct(product)">Show Info</button>
-      <button v-on:click="updateFormProduct(product)">Update Info</button>
+      <p><button v-on:click="showProduct(product)">Show Info</button></p>
+      <p><button v-on:click="editProduct(product)">Update</button></p>
       <hr />
     </div>
     <dialog id="product-details">
@@ -39,7 +39,12 @@
         <p>
           Image URL: <input type="text" v-model="currentProduct.image_url" />
         </p>
-        <button v-on:click="updateProduct()">Update</button>
+        <p>
+          <button v-on:click="updateProduct(currentProduct)">Update</button>
+        </p>
+        <p>
+          <button v-on:click="destroyProduct(currentProduct)">Delete</button>
+        </p>
       </form>
     </dialog>
   </div>
@@ -86,17 +91,26 @@ export default {
       console.log(this.currentProduct);
       document.querySelector("#product-details").showModal();
     },
-    updateFormProduct: function (product) {
+    editProduct: function (product) {
       this.currentProduct = product;
       document.querySelector("#product-update").showModal();
     },
-    updateProduct: function () {
+    updateProduct: function (product) {
       axios
         .patch(
-          `http://localhost:3000/products/${this.currentProduct.id}`,
+          `http://localhost:3000/products/${product.id}`,
           this.currentProduct
         )
         .then((response) => {
+          console.log(response.data);
+        });
+    },
+    destroyProduct: function (product) {
+      axios
+        .delete(`http://localhost:3000/products/${product.id}`)
+        .then((response) => {
+          var index = this.products.indexOf(product);
+          this.products.splice(index, 1);
           console.log(response.data);
         });
     },
