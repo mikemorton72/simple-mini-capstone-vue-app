@@ -15,6 +15,7 @@
       <p>Description: {{ product.description }}</p>
       <p>Price: {{ product.price }}</p>
       <button v-on:click="productsShow(product)">Show Info</button>
+      <button v-on:click="productsUpdateForm(product)">Update Info</button>
       <hr />
     </div>
     <dialog id="product-details">
@@ -24,6 +25,21 @@
         <p>{{ currentProduct.description }}</p>
         <p>Price: {{ currentProduct.price }}</p>
         <button>Close</button>
+      </form>
+    </dialog>
+    <dialog id="product-update">
+      <form method="dialog">
+        <h2>{{ currentProduct.name }}</h2>
+        <p>Name: <input type="text" v-model="currentProduct.name" /></p>
+        <p>
+          Description:
+          <input type="text" v-model="currentProduct.description" />
+        </p>
+        <p>Price: <input type="text" v-model="currentProduct.price" /></p>
+        <p>
+          Image URL: <input type="text" v-model="currentProduct.image_url" />
+        </p>
+        <button v-on:click="productsUpdate()">Update</button>
       </form>
     </dialog>
   </div>
@@ -69,6 +85,20 @@ export default {
       this.currentProduct = product;
       console.log(this.currentProduct);
       document.querySelector("#product-details").showModal();
+    },
+    productsUpdateForm: function (product) {
+      this.currentProduct = product;
+      document.querySelector("#product-update").showModal();
+    },
+    productsUpdate: function () {
+      axios
+        .patch(
+          `http://localhost:3000/products/${this.currentProduct.id}`,
+          this.currentProduct
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
     },
   },
   computed: {
