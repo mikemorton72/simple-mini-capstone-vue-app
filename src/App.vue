@@ -32,4 +32,9 @@
   </div>
 </template>
 
-<style></style>
+<style>
+body {
+  font-family: "Trebuchet MS";
+  background-image: url(repeated-square.png);
+}
+</style>
