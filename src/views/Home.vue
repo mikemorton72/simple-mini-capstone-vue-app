@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <h1>Simple Products App</h1>
     <h2>Create a new Product</h2>
     <p>Name: <input type="text" v-model="newProduct.name" /></p>
     <p>Description: <input type="text" v-model="newProduct.description" /></p>
@@ -8,6 +7,7 @@
     <p>image_url: <input type="text" v-model="newProduct.image_url" /></p>
     <button v-on:click="createProduct">Add Product</button>
     <hr />
+    <h2>Products Index</h2>
     <div v-for="product in sortedProducts" v-bind:key="product.id">
       <p>Product: {{ product.id }}</p>
       <p>{{ product.name }}</p>
